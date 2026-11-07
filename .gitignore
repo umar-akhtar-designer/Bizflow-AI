@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+frontend/dist/
+.venv/
+.bizflow-venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Runtime data
+*.db
+*.db-shm
+*.db-wal
+backend/bizflow.db*
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Editor / OS noise
+.DS_Store
+*.swp
+.idea/
+.vscode/

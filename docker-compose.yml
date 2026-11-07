@@ -1,0 +1,59 @@
+name: bizflow-ai
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bizflow}
+      POSTGRES_USER: ${POSTGRES_USER:-bizflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bizflow_dev_password}
+    volumes:
+      - bizflow_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-bizflow}:${POSTGRES_PASSWORD:-bizflow_dev_password}@db:5432/${POSTGRES_DB:-bizflow}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (copy .env.example)}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-1440}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080}
+      SEED_DEMO_DATA: ${SEED_DEMO_DATA:-true}
+      AI_PROVIDER: ${AI_PROVIDER:-auto}
+      VULTR_INFERENCE_API_KEY: ${VULTR_INFERENCE_API_KEY:-}
+      VULTR_INFERENCE_BASE_URL: ${VULTR_INFERENCE_BASE_URL:-https://api.vultrinference.com/v1}
+      VULTR_MODEL: ${VULTR_MODEL:-llama-3.1-70b-instruct-fp8}
+      AI_TIMEOUT_SECONDS: ${AI_TIMEOUT_SECONDS:-25}
+      AI_MAX_RETRIES: ${AI_MAX_RETRIES:-2}
+      WORKFLOW_STEP_DELAY_MS: ${WORKFLOW_STEP_DELAY_MS:-320}
+      WORKFLOW_TIMEOUT_SECONDS: ${WORKFLOW_TIMEOUT_SECONDS:-120}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-180}
+      RUN_MIGRATIONS: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8000"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:${APP_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  bizflow_pgdata:
