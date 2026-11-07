@@ -186,7 +186,7 @@ The suite runs against a disposable SQLite database and never touches the demo d
 ## Project layout
 
 ```
-bizflow-ai/
+repository root
 ├── backend/
 │   ├── app/
 │   │   ├── agents/            # specialized agent profiles + drafting
