@@ -1,0 +1,43 @@
+# Render Blueprint — free permanent public URL, no Vultr credit needed.
+#
+# ⚠️ FALLBACK ONLY. This does NOT satisfy the Vultr Agent Rush hackathon:
+#    Challenge 2 requires a Vultr VM backend and a public URL deployed on
+#    Vultr. Use this only to keep a shareable demo alive while Vultr
+#    verification is pending, or for non-hackathon sharing.
+#
+# Deploy: push this repo to GitHub, then in Render choose
+#   New + → Blueprint → connect the repo → Apply.
+#
+# Notes:
+# - Render's free plan sleeps after ~15 minutes of inactivity. The first visit
+#   afterwards takes ~30-60s to wake.
+# - The free plan has an ephemeral filesystem, so the SQLite demo database is
+#   re-created and re-seeded on every restart. Demo data therefore looks the
+#   same after each wake, which is fine for a judged demo.
+# - For durable data, add a paid disk and point DATABASE_URL at it, or switch
+#   to the docker-compose.yml Postgres stack.
+
+services:
+  - type: web
+    name: bizflow-ai
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SEED_DEMO_DATA
+        value: "true"
+      # Leave the AI provider deterministic so the demo never depends on an
+      # external key. Set to "auto" and add VULTR_INFERENCE_API_KEY to enable
+      # real model inference.
+      - key: AI_PROVIDER
+        value: deterministic
+      - key: DATABASE_URL
+        value: sqlite:////app/bizflow.db
+      - key: CORS_ORIGINS
+        value: https://bizflow-ai.onrender.com

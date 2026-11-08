@@ -156,9 +156,9 @@ The app runs fully without an LLM key, using the deterministic planner and label
 AI_PROVIDER=auto
 VULTR_INFERENCE_API_KEY=<your-key>
 VULTR_INFERENCE_BASE_URL=https://api.vultrinference.com/v1
-VULTR_MODEL=llama-3.1-70b-instruct-fp8
-AI_TIMEOUT_SECONDS=25
-AI_MAX_RETRIES=2
+VULTR_MODEL=deepseek-v4.1-flash-1017
+AI_TIMEOUT_SECONDS=15
+AI_MAX_RETRIES=1
 ```
 
 3. Recreate the backend:

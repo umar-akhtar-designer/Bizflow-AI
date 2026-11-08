@@ -1,7 +1,11 @@
 import clsx, { type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
+// twMerge resolves conflicting Tailwind utilities with last-wins semantics, so
+// component-level overrides (bg-white, text-white) reliably beat variant
+// defaults instead of depending on stylesheet order.
 export function cn(...inputs: ClassValue[]) {
-  return clsx(inputs);
+  return twMerge(clsx(inputs));
 }
 
 export function money(value: number | null | undefined, currency = "USD") {

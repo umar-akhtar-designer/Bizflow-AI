@@ -54,10 +54,10 @@ class Settings:
         "VULTR_INFERENCE_BASE_URL", "https://api.vultrinference.com/v1"
     )
     vultr_model: str = os.getenv(
-        "VULTR_MODEL", "llama-3.1-70b-instruct-fp8"
+        "VULTR_MODEL", "deepseek-v4.1-flash-1017"
     )
-    ai_timeout_seconds: float = float(os.getenv("AI_TIMEOUT_SECONDS", "25"))
-    ai_max_retries: int = int(os.getenv("AI_MAX_RETRIES", "2"))
+    ai_timeout_seconds: float = float(os.getenv("AI_TIMEOUT_SECONDS", "15"))
+    ai_max_retries: int = int(os.getenv("AI_MAX_RETRIES", "1"))
 
     # Demo pacing so the live execution timeline is legible.
     step_delay_ms: int = int(os.getenv("WORKFLOW_STEP_DELAY_MS", "320"))

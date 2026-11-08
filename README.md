@@ -155,7 +155,7 @@ All configuration is environment-driven; see [`.env.example`](.env.example). Key
 | `SEED_DEMO_DATA` | `true` | Seed the demo workspace on first boot |
 | `AI_PROVIDER` | `auto` | `auto`, `vultr` or `deterministic` |
 | `VULTR_INFERENCE_API_KEY` | empty | Enables Vultr Serverless Inference |
-| `VULTR_MODEL` | `llama-3.1-70b-instruct-fp8` | Model identifier |
+| `VULTR_MODEL` | `deepseek-v4.1-flash-1017` | Model identifier |
 | `WORKFLOW_STEP_DELAY_MS` | `320` | Timeline pacing; set `0` in tests |
 | `RATE_LIMIT_PER_MINUTE` | `180` | In-process sliding window |
 
@@ -243,4 +243,4 @@ repository root
 
 ## License
 
-Built for the Vultr Agent Rush 2026 hackathon. Add a license before commercial distribution.
+Built for the Vultr Agent Rush 2026 hackathon. Released under the [MIT License](LICENSE).

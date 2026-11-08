@@ -82,6 +82,15 @@ class VultrProvider:
                     attempt + 1,
                     type(exc).__name__,
                 )
+                # A 4xx (bad key, unknown model, malformed request) will never
+                # succeed on retry. Fail fast instead of blocking the workflow
+                # for timeout * retries seconds.
+                if isinstance(exc, httpx.HTTPStatusError) and 400 <= exc.response.status_code < 500:
+                    logger.warning(
+                        "Vultr inference rejected the request (HTTP %s); not retrying.",
+                        exc.response.status_code,
+                    )
+                    break
         raise AIProviderError(
             f"Vultr inference unavailable after retries ({type(last_error).__name__})"
         )

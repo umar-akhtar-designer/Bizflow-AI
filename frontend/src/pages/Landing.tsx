@@ -766,12 +766,12 @@ export default function Landing() {
                 <Button
                   size="lg"
                   onClick={() => navigate("/login?demo=1")}
-                  className="w-full bg-cream text-ink hover:bg-white sm:w-auto"
+                  className="w-full bg-white text-ink hover:bg-cream sm:w-auto"
                 >
                   Open the live demo <ArrowRight size={16} />
                 </Button>
                 <a href="#workflow">
-                  <Button size="lg" variant="ghost" className="w-full text-cream hover:bg-white/10 hover:text-white sm:w-auto">
+                  <Button size="lg" variant="ghost" className="w-full border border-white/25 text-white hover:bg-white/10 hover:text-white sm:w-auto">
                     Replay the workflow
                   </Button>
                 </a>
