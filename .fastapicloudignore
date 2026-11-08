@@ -1,0 +1,5 @@
+# FastAPI Cloud upload rules (same syntax as .gitignore, takes precedence).
+#
+# frontend/dist/ is generated and git-ignored, but the single-process deployment
+# serves it from FastAPI, so it must be uploaded.
+!frontend/dist/

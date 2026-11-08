@@ -1,0 +1,6 @@
+# Root requirements file for single-process hosts (FastAPI Cloud).
+#
+# The backend's pinned dependencies stay the single source of truth; this file
+# only adds the FastAPI CLI/standard extras the host expects at the repo root.
+-r backend/requirements.txt
+fastapi[standard]==0.162.0
