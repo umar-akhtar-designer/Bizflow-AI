@@ -11,7 +11,7 @@
 Open `index.html`, find this line on the last slide:
 
 ```html
-demo &nbsp;<b>[ ADD PUBLIC URL WHEN LIVE ]</b><br>
+demo &nbsp;<b>bizflow-ai.fastapicloud.dev</b><br>
 ```
 
 Replace the bracket text with your real URL, then regenerate the PDF (below).

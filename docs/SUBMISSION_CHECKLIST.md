@@ -14,7 +14,7 @@ Source of requirements: https://lablab.ai/ai-hackathons/vultr-hackathon
 | 1 | Public GitHub repository | ✅ Done | `umar-akhtar-designer/Bizflow-AI` |
 | 2 | Setup + documentation in README | ✅ Done | README, `docs/ARCHITECTURE.md`, `docs/API.md` |
 | 3 | **Vultr VM backend deployment** | ❌ **Missing** | Required. Docker Compose stack is ready |
-| 4 | **Public demo URL on Vultr** | ❌ **Missing** | Required. A tunnel or Render does **not** count |
+| 4 | **Public demo URL on Vultr** | ❌ **Missing** | Required. Interim demo is live on FastAPI Cloud (not Vultr): https://bizflow-ai.fastapicloud.dev |
 | 5 | Recorded demo video | ⬜ To record | Script in `docs/VOICE_SCRIPT.md` |
 | 6 | Clear architecture / use-case explanation | ✅ Done | `docs/ARCHITECTURE.md`, README |
 | 7 | MIT license | ✅ Done | `LICENSE` |

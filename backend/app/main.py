@@ -142,11 +142,43 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
 
 
 # Optional single-process deployment: serve the built React app from FastAPI.
-FRONTEND_DIST = Path(
-    os.getenv(
-        "FRONTEND_DIST",
-        str(Path(__file__).resolve().parents[2] / "frontend" / "dist"),
-    )
+# Different hosts lay the repo out differently, so check the common locations
+# instead of trusting one relative path.
+def _frontend_candidates() -> list[Path]:
+    here = Path(__file__).resolve()
+    raw: list[Path] = []
+    env = os.getenv("FRONTEND_DIST")
+    if env:
+        raw.append(Path(env))
+    raw += [
+        # Bundled into the Python package by scripts/bundle_frontend.sh. This is
+        # the most portable option: it travels with the backend source.
+        here.parent / "static",
+        here.parents[2] / "frontend" / "dist",
+        Path.cwd() / "frontend" / "dist",
+        Path.cwd() / "dist",
+        here.parents[2] / "dist",
+        Path("/app/frontend/dist"),
+        Path("/app/dist"),
+    ]
+    seen: list[Path] = []
+    for path in raw:
+        if path not in seen:
+            seen.append(path)
+    return seen
+
+
+FRONTEND_DIST = next(
+    (
+        path
+        for path in _frontend_candidates()
+        if path.is_dir() and (path / "index.html").exists()
+    ),
+    _frontend_candidates()[0],
+)
+logger.info(
+    "Frontend candidates: %s",
+    ", ".join(str(path) for path in _frontend_candidates()),
 )
 if FRONTEND_DIST.is_dir() and (FRONTEND_DIST / "index.html").exists():
     assets = FRONTEND_DIST / "assets"
