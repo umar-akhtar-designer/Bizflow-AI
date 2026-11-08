@@ -93,14 +93,18 @@ def extract_customer_hint(text: str, customers: list[Customer]) -> str:
 
 
 def extract_product_hint(text: str, products: list[Product]) -> str:
-    lowered = normalize(text)
+    lowered = f" {normalize(text)} "
+    best_name, best_len = "", 0
     for product in products:
-        for variant in _name_variants(product.name):
-            if variant and variant in lowered:
-                return product.name
+        candidates = list(_name_variants(product.name))
         sku = normalize(product.sku)
-        if sku and sku in lowered:
-            return product.name
+        if sku:
+            candidates.append(sku)
+        for variant in candidates:
+            if variant and f" {variant} " in lowered and len(variant) > best_len:
+                best_name, best_len = product.name, len(variant)
+    if best_name:
+        return best_name
     match = re.search(
         r"(?:of|for)\s+([A-Za-z0-9][\w\s&'./-]{2,70}?)(?:\.|,|$|\s+(?:and|then|with|please)\b)",
         text,

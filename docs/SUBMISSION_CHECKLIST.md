@@ -13,8 +13,8 @@ Source of requirements: https://lablab.ai/ai-hackathons/vultr-hackathon
 |---|---|---|---|
 | 1 | Public GitHub repository | ✅ Done | `umar-akhtar-designer/Bizflow-AI` |
 | 2 | Setup + documentation in README | ✅ Done | README, `docs/ARCHITECTURE.md`, `docs/API.md` |
-| 3 | **Vultr VM backend deployment** | ❌ **Missing** | Required. Docker Compose stack is ready |
-| 4 | **Public demo URL on Vultr** | ❌ **Missing** | Required. Interim demo is live on FastAPI Cloud (not Vultr): https://bizflow-ai.fastapicloud.dev |
+| 3 | **Vultr VM backend deployment** | ✅ Done | Docker Compose stack running on a Vultr Cloud Compute VM |
+| 4 | **Public demo URL on Vultr** | ✅ Done | http://65.20.69.1:8080 |
 | 5 | Recorded demo video | ⬜ To record | Script in `docs/VOICE_SCRIPT.md` |
 | 6 | Clear architecture / use-case explanation | ✅ Done | `docs/ARCHITECTURE.md`, README |
 | 7 | MIT license | ✅ Done | `LICENSE` |
@@ -30,7 +30,7 @@ Source of requirements: https://lablab.ai/ai-hackathons/vultr-hackathon
 
 | Criterion | Weight | Current strength |
 |---|---|---|
-| Application of Technology | 1 of 4 | ⚠️ **Weak without an inference key** — judged on model integration |
+| Application of Technology | 1 of 4 | ✅ Vultr Serverless Inference connected (deepseek-v4.1-flash-1017) |
 | Presentation | 1 of 4 | ✅ Strong — verified demo, honest claims |
 | Business Value | 1 of 4 | ✅ Strong — order-to-cash, finance, procurement |
 | Originality | 1 of 4 | ✅ Strong — verify-by-read-back + human approval gate |

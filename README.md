@@ -6,6 +6,8 @@ BizFlow AI turns an instruction like *“Process an order for Ahmed Raza for 3 u
 
 Built for the **Vultr Agent Rush 2026 — “Powering the Future of Work”** challenge.
 
+**Live demo:** http://65.20.69.1:8080 (login `demo@bizflow.ai` / `demo1234`)
+
 ---
 
 ## What makes it real
@@ -126,7 +128,7 @@ docker compose up --build
 
 Open **http://localhost:8080**. Services: PostgreSQL 16, FastAPI (migrations + API), Nginx (SPA + `/api` reverse proxy).
 
-> The compose stack is provided as a deployment asset. It was **not** runtime-tested in the authoring environment because Docker was unavailable; see [Known limitations](#known-limitations).
+> The compose stack was runtime-tested on a Vultr Cloud Compute VM (Mumbai, Ubuntu): PostgreSQL, FastAPI and Nginx all start healthy and `GET /api/health` returns `"database":"ok"`.
 
 ## Deployment to Vultr
 
@@ -141,7 +143,7 @@ Short version:
 5. Terminate TLS on the host with Nginx + Certbot (sample config included), or put Cloudflare in front.
 6. Verify `GET /api/health` returns `"database":"ok"` and the expected AI mode.
 
-> **Honesty note:** this repository has not been deployed to Vultr from this workspace. No public URL or live Vultr deployment is claimed. The assets and steps above are the intended path and are reproducible.
+> **Live deployment:** BizFlow AI runs on a Vultr Cloud Compute VM at **http://65.20.69.1:8080** (Docker Compose: PostgreSQL 16 + FastAPI + Nginx), with Vultr Serverless Inference connected. Demo login: `demo@bizflow.ai` / `demo1234`.
 
 ## Configuration
 
@@ -226,8 +228,8 @@ repository root
 ## Known limitations
 
 - **External delivery is not configured.** Approved customer messages are queued in the demo outbox; no email provider is called. The UI says so explicitly.
-- **Docker Compose was not runtime-tested here.** Docker was unavailable in the authoring environment. The Dockerfiles, compose file and Nginx config are provided but should be validated on the target host.
-- **No Vultr deployment has been verified.** No credentials or public endpoint were available. Deployment steps are documented, not claimed as completed.
+- **Plain HTTP endpoint.** The live demo is served over HTTP on a bare IP. For production, terminate TLS in front (see docs/DEPLOYMENT.md).
+- **Single-VM deployment.** One Vultr VM runs the whole stack; there is no high availability or managed backup in this demo.
 - **Rate limiting is in-process.** Multi-worker or multi-instance deployments should move the limiter to Redis.
 - **Time-saved figures are illustrative.** The 14-minute manual baseline is labeled as an estimate, not a timed study.
 - **SQLite is for the demo.** Use PostgreSQL for concurrent production traffic.
