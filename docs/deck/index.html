@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BizFlow AI — Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1410; --ink-soft:#141F1A;
+    --paper:#F5F4EF; --cream:#FBFAF7;
+    --forest:#0B7A5C; --forest-400:#3FA581; --forest-50:#ECF8F2; --forest-100:#D4EEE1;
+    --coral:#FF6B3D; --amber:#C9820A;
+    --line:#E5E3DA; --muted:#68716C; --sage:#8A948D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @page{ size:1600px 900px; margin:0 }
+  html,body{background:#8c8c8c;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .slide{
+    width:1600px;height:900px;background:var(--paper);color:var(--ink);
+    position:relative;overflow:hidden;page-break-after:always;
+    padding:76px 88px;display:flex;flex-direction:column;
+  }
+  .slide:last-child{page-break-after:auto}
+  .slide.dark{background:var(--ink);color:var(--cream);justify-content:center}
+  .slide.vcenter{justify-content:center}
+  /* print: no page background bleed */
+  @media print{ html,body{background:none} .slide{margin:0} }
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--forest);
+  }
+  .dark .eyebrow{color:var(--forest-400)}
+  h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;line-height:.98;letter-spacing:-.02em}
+  h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;line-height:1.02;letter-spacing:-.015em;font-size:66px}
+  .lede{font-size:21px;line-height:1.55;color:var(--muted);max-width:920px}
+  .dark .lede{color:#A8B3AD}
+
+  .brandmark{display:flex;align-items:center;gap:14px}
+  .brandmark img{width:44px;height:44px;border-radius:12px;background:var(--cream);padding:6px}
+  .wordmark{font-size:22px;font-weight:600;letter-spacing:-.02em}
+  .wordmark span{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:var(--forest);color:#fff;margin-left:6px;vertical-align:middle}
+
+  .card{background:var(--cream);border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 2px rgba(11,20,16,.04),0 8px 24px -12px rgba(11,20,16,.12)}
+  .dark .card{background:#111B16;border-color:#22302A;box-shadow:none}
+
+  .shot{border-radius:16px;border:1px solid var(--line);box-shadow:0 2px 4px rgba(11,20,16,.05),0 24px 48px -20px rgba(11,20,16,.28);display:block;width:100%;height:100%;object-fit:cover;object-position:top left}
+  .dark .shot{border-color:#2A3833}
+
+  .mono{font-family:'JetBrains Mono',monospace}
+
+  /* slide 1 */
+  .title-wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;height:100%;align-items:center}
+  .title-wrap h1{font-size:132px;margin:22px 0 18px}
+  .title-wrap .sub{font-size:26px;color:#C9D4CE;max-width:520px;line-height:1.45}
+  .title-meta{position:absolute;left:88px;bottom:64px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7C8A84}
+  .title-shot{height:520px;transform:rotate(-1.2deg)}
+
+  /* slide 2 nodes */
+  .nodes{display:flex;align-items:center;gap:0;margin-top:64px}
+  .node{flex:1;background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:26px 22px;box-shadow:0 1px 2px rgba(11,20,16,.04)}
+  .node .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
+  .node .v{font-size:19px;font-weight:600}
+  .node.bad{border-color:#F3C3B3;background:#FFF3EF}
+  .node.bad .v{color:#B33A18}
+  .link{width:44px;height:1px;background:var(--line);flex:none}
+  .link.bad{background:var(--coral)}
+
+  /* slide 3 */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px;flex:1}
+  .panel{background:var(--cream);border:1px solid var(--line);border-radius:22px;padding:40px 40px 34px}
+  .panel h3{font-size:15px;font-family:'JetBrains Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin-bottom:22px}
+  .panel li{list-style:none;font-size:22px;line-height:1.5;padding:14px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+  .panel li:last-child{border-bottom:none}
+  .panel.good{border-color:var(--forest-100);background:var(--forest-50)}
+  .panel.good h3{color:var(--forest)}
+  .panel.good li{color:var(--forest);font-weight:600;border-bottom-color:#CFE9DC}
+
+  /* slide 4 steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:64px}
+  .step{padding:34px 26px;border-radius:18px;background:#111B16;border:1px solid #22302A}
+  .step .n{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--forest-400);letter-spacing:.18em;margin-bottom:16px}
+  .step .t{font-family:'Instrument Serif',Georgia,serif;font-size:38px;margin-bottom:10px}
+  .step p{font-size:15px;line-height:1.5;color:#93A09A}
+  .step.hi{background:var(--forest);border-color:var(--forest)}
+  .step.hi .n{color:#BFEBD8}
+  .step.hi p{color:#D8F3E8}
+
+  /* slide 5 architecture */
+  .arch{display:flex;align-items:center;gap:14px;margin-top:60px}
+  .arch .box{flex:1;background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:24px 20px;text-align:center}
+  .arch .box .k{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
+  .arch .box .v{font-size:17px;font-weight:600;line-height:1.3}
+  .arch .arw{font-size:22px;color:var(--sage);flex:none}
+  .arch .box.core{border-color:var(--forest);background:var(--forest-50)}
+  .arch .box.core .v{color:var(--forest)}
+  .branch{margin-top:26px;margin-left:34%;display:inline-flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--sage)}
+  .dashline{width:160px;border-top:2px dashed var(--line)}
+
+  /* slide 6 */
+  .split{display:grid;grid-template-columns:1.02fr 1fr;gap:40px;flex:1;margin-top:44px}
+  .feat{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .feat .card{padding:24px 22px}
+  .feat .t{font-size:17px;font-weight:700;margin-bottom:8px}
+  .feat p{font-size:13.5px;line-height:1.5;color:var(--muted)}
+  .feat .dot{width:26px;height:26px;border-radius:8px;background:var(--forest-50);color:var(--forest);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-bottom:12px}
+
+  /* slide 7 */
+  .proof{display:grid;grid-template-columns:1.55fr 1fr;gap:34px;flex:1;margin-top:40px}
+  .stats{display:flex;flex-direction:column;gap:16px;justify-content:center}
+  .stat{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+  .stat .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage)}
+  .stat .v{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;margin-top:6px}
+  .stat.bad{border-color:#F3C3B3;background:#FFF3EF}
+  .stat.bad .v{color:#B33A18}
+  .quote{margin-top:26px;padding-left:20px;border-left:3px solid var(--coral);font-family:'Instrument Serif',Georgia,serif;font-size:27px;line-height:1.35;color:var(--ink)}
+
+  /* slide 8 */
+  .grid4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:20px;flex:1;margin-top:32px;min-height:0}
+  .cell{position:relative;min-height:0;overflow:hidden}
+  .cell .shot{position:absolute;inset:0;height:100%;width:100%}
+  .cap{position:absolute;left:14px;bottom:12px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;background:rgba(11,20,16,.82);color:#EAF3EE;padding:5px 10px;border-radius:7px}
+
+  /* slide 9 */
+  .stack{display:flex;flex-direction:column;gap:12px;margin-top:52px;max-width:900px}
+  .layer{display:flex;align-items:center;justify-content:space-between;background:#111B16;border:1px solid #22302A;border-radius:14px;padding:20px 26px}
+  .layer .l{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--forest-400)}
+  .layer .r{font-size:18px;font-weight:500;color:#E6EFEA}
+  .monoline{position:absolute;right:88px;top:190px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:2;color:#7C8A84;text-align:right}
+  .monoline b{color:#CFE9DC;font-weight:500}
+
+  /* slide 10 */
+  .close-wrap{height:100%;display:flex;flex-direction:column;justify-content:center}
+  .close-wrap h1{font-size:96px;max-width:1100px;margin:18px 0 30px}
+  .close-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+  .pill{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border-radius:999px;border:1px solid #2A3833;color:#CFE9DC}
+  .links{position:absolute;left:88px;bottom:70px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8A84;line-height:1.9}
+  .links b{color:#CFE9DC;font-weight:500}
+</style>
+</head>
+<body>
+
+<!-- 1 · TITLE -->
+<section class="slide dark">
+  <div class="title-wrap">
+    <div>
+      <div class="brandmark" style="margin-bottom:18px">
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--cream);color:var(--ink);display:flex;align-items:center;justify-content:center;position:relative">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 6.5h6.2c2.9 0 4.8 1.6 4.8 4 0 1.7-.9 2.9-2.4 3.5l2.8 3.5h-4.2l-2.6-3.1H8.8v3.1H5V6.5Z" fill="currentColor"/>
+          </svg>
+          <span style="position:absolute;right:-2px;top:-2px;width:10px;height:10px;border-radius:999px;background:var(--coral);box-shadow:0 0 0 2px var(--ink)"></span>
+        </div>
+        <div class="wordmark" style="color:#FBFAF7">bizflow <span>AI</span></div>
+      </div>
+      <div class="eyebrow">Vultr Agent Rush 2026 · Challenge 02</div>
+      <h1>BizFlow AI</h1>
+      <p class="sub">Verified business operations with human control.</p>
+      <p class="sub" style="font-size:17px;color:#7C8A84;margin-top:26px">Powering the Future of Work</p>
+    </div>
+    <div class="title-shot"><img class="shot" src="../screenshots/01-overview.png" alt="BizFlow AI overview dashboard"></div>
+  </div>
+  <div class="title-meta">Umar Akhtar · lablab.ai submission</div>
+</section>
+
+<!-- 2 · PROBLEM -->
+<section class="slide vcenter">
+  <div class="eyebrow">01 · Problem</div>
+  <h2 style="margin-top:16px;max-width:1180px">An order touches four systems.<br>One failure breaks the books.</h2>
+  <div class="nodes">
+    <div class="node"><div class="k">Step 01</div><div class="v">Customer record</div></div>
+    <div class="link"></div>
+    <div class="node"><div class="k">Step 02</div><div class="v">Inventory</div></div>
+    <div class="link bad"></div>
+    <div class="node bad"><div class="k">Fails here</div><div class="v">Sales ledger</div></div>
+    <div class="link"></div>
+    <div class="node"><div class="k">Never reached</div><div class="v">Finance</div></div>
+  </div>
+  <p class="lede" style="margin-top:56px">A half-finished write leaves the order created, the stock unchanged and the invoice missing. Nobody notices until month-end.</p>
+</section>
+
+<!-- 3 · GAP -->
+<section class="slide">
+  <div class="eyebrow">02 · The gap</div>
+  <h2 style="margin-top:16px">Most AI tools describe the work.<br>They don't do it.</h2>
+  <div class="two">
+    <div class="panel">
+      <h3>Chatbot</h3>
+      <ul>
+        <li>Writes you a plan</li>
+        <li>Explains what it would do</li>
+        <li>Leaves you to do the work</li>
+        <li>Can't prove anything happened</li>
+      </ul>
+    </div>
+    <div class="panel good">
+      <h3>BizFlow AI</h3>
+      <ul>
+        <li>Executes real transactions</li>
+        <li>Writes atomically — all or nothing</li>
+        <li>Verifies by reading records back</li>
+        <li>Stops for a human before anything leaves</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · PROMISE -->
+<section class="slide dark">
+  <div class="eyebrow">03 · Solution</div>
+  <h2 style="margin-top:16px">One sentence in.<br>Real operations out.</h2>
+  <div class="steps">
+    <div class="step"><div class="n">01</div><div class="t">Plan</div><p>Plain-English intent resolved against real customers and products.</p></div>
+    <div class="step"><div class="n">02</div><div class="t">Execute</div><p>Only registered tools run. One atomic transaction writes every record.</p></div>
+    <div class="step hi"><div class="n">03</div><div class="t">Verify</div><p>Every write is re-read from the database and checked independently.</p></div>
+    <div class="step"><div class="n">04</div><div class="t">Approve</div><p>Messages, refunds and restocks wait for a named human decision.</p></div>
+  </div>
+  <p class="lede" style="margin-top:52px;color:#A8B3AD">The model never touches the database directly. It plans; the tools write.</p>
+</section>
+
+<!-- 5 · ARCHITECTURE -->
+<section class="slide">
+  <div class="eyebrow">04 · Architecture</div>
+  <h2 style="margin-top:16px">A tool-bound orchestrator,<br>not a free-roaming agent.</h2>
+  <div class="arch">
+    <div class="box"><div class="k">Interface</div><div class="v">React SPA</div></div>
+    <div class="arw">→</div>
+    <div class="box core"><div class="k">Control layer</div><div class="v">FastAPI orchestrator</div></div>
+    <div class="arw">→</div>
+    <div class="box"><div class="k">Bounded surface</div><div class="v">Registered tools</div></div>
+    <div class="arw">→</div>
+    <div class="box"><div class="k">Source of truth</div><div class="v">PostgreSQL</div></div>
+  </div>
+  <div class="branch"><div class="dashline"></div> Vultr Serverless Inference — optional intent refinement</div>
+  <p class="mono" style="margin-top:auto;font-size:13px;color:var(--sage);letter-spacing:.05em">Only registered tools can write. Every call is logged, timed and audited.</p>
+</section>
+
+<!-- 6 · DIFFERENTIATOR -->
+<section class="slide">
+  <div class="eyebrow">05 · What makes it different</div>
+  <h2 style="margin-top:14px">It proves the work happened.</h2>
+  <div class="split">
+    <div class="feat">
+      <div class="card"><div class="dot">✓</div><div class="t">Atomic writes</div><p>Order, stock, movement, sale and invoice commit together — or not at all.</p></div>
+      <div class="card"><div class="dot">✓</div><div class="t">Verify by read-back</div><p>Success is checked against persisted rows, never asserted.</p></div>
+      <div class="card"><div class="dot">✓</div><div class="t">Prepare ≠ execute</div><p>Sensitive actions create an approval request, not a side effect.</p></div>
+      <div class="card"><div class="dot">✓</div><div class="t">Honest AI mode</div><p>The UI states when no model is connected. No fake agent output.</p></div>
+    </div>
+    <div><img class="shot" src="../screenshots/03-workflow-completed.png" alt="Completed workflow with Verified badge and six of six verification checks"></div>
+  </div>
+</section>
+
+<!-- 7 · PROOF -->
+<section class="slide">
+  <div class="eyebrow" style="color:#B33A18">06 · Safety</div>
+  <h2 style="margin-top:14px">Ask for the impossible.<br>Nothing is written.</h2>
+  <div class="proof">
+    <div><img class="shot" src="../screenshots/04-workflow-failed.png" alt="Failed workflow: insufficient stock, no partial writes retained"></div>
+    <div class="stats">
+      <div class="stat bad"><div class="k">Status</div><div class="v">failed</div></div>
+      <div class="stat"><div class="k">Records written</div><div class="v">0</div></div>
+      <div class="stat"><div class="k">Later steps</div><div class="v">skipped</div></div>
+      <div class="quote">A system that lies about success is worse than one that fails.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · PRODUCT -->
+<section class="slide">
+  <div class="eyebrow">07 · Product</div>
+  <h2 style="margin-top:14px;font-size:56px">Fifteen screens.<br>Every number from the database.</h2>
+  <div class="grid4">
+    <div class="cell"><img class="shot" src="../screenshots/01-overview.png" alt="Overview dashboard"><span class="cap">Overview</span></div>
+    <div class="cell"><img class="shot" src="../screenshots/02-manager.png" alt="AI Business Manager"><span class="cap">AI Manager</span></div>
+    <div class="cell"><img class="shot" src="../screenshots/05-approvals.png" alt="Approval center"><span class="cap">Approvals</span></div>
+    <div class="cell"><img class="shot" src="../screenshots/06-finance.png" alt="Finance ledger"><span class="cap">Finance</span></div>
+  </div>
+</section>
+
+<!-- 9 · DEPLOYMENT -->
+<section class="slide dark">
+  <div class="eyebrow">08 · Infrastructure</div>
+  <h2 style="margin-top:14px">Vultr Cloud Compute.<br>Docker Compose. PostgreSQL 16.</h2>
+  <div class="stack">
+    <div class="layer"><span class="l">Compute</span><span class="r">Vultr Cloud Compute · Ubuntu 24.04</span></div>
+    <div class="layer"><span class="l">Edge</span><span class="r">Nginx · TLS via Certbot</span></div>
+    <div class="layer"><span class="l">Application</span><span class="r">FastAPI · Uvicorn · Alembic migrations</span></div>
+    <div class="layer"><span class="l">Data</span><span class="r">PostgreSQL 16 · persistent volume</span></div>
+  </div>
+  <div class="monoline">
+    health &nbsp;<b>/api/health</b><br>
+    migrations &nbsp;<b>alembic upgrade head</b><br>
+    isolation &nbsp;<b>tenant-scoped queries</b><br>
+    audit &nbsp;<b>append-only log</b>
+  </div>
+</section>
+
+<!-- 10 · CLOSE -->
+<section class="slide dark">
+  <div class="close-wrap">
+    <div class="eyebrow">09 · Closing</div>
+    <h1>An operations layer<br>you can actually trust.</h1>
+    <div class="close-row">
+      <span class="pill">Real writes</span>
+      <span class="pill">Verified results</span>
+      <span class="pill">Human control</span>
+    </div>
+  </div>
+  <div class="links">
+    repo &nbsp;<b>github.com/umar-akhtar-designer/Bizflow-AI</b><br>
+    demo &nbsp;<b>[ ADD PUBLIC URL WHEN LIVE ]</b><br>
+    built for &nbsp;<b>Vultr Agent Rush 2026 · Challenge 02</b>
+  </div>
+</section>
+
+</body>
+</html>
